@@ -1,79 +1,88 @@
 const products = [
-    { name: "Face Cream" },
-    { name: "Lipstick" },
-    { name: "Shampoo" },
-    { name: "Face Wash" }
+  { name: "Face Cream", price: 120.50 },
+  { name: "Lipstick", price: 250.00 },
+  { name: "Shampoo", price: 180.75 },
+  { name: "Face Wash", price: 150.00 }
 ];
 
+function fillProducts(selectBox) {
+  selectBox.innerHTML = '<option value="">Select</option>';
 
-function fillProducts(selectBox){
-    selectBox.innerHTML = `<option value="">--Select Product--</option>`;
-
-    products.forEach(product => {
-        selectBox.innerHTML += `
-            <option value="${product.name}">
-                ${product.name}
-            </option>
-        `;
-    });
+  for (let i = 0; i < products.length; i++) {
+    let option = document.createElement("option");
+    option.value = products[i].name;
+    option.textContent = products[i].name;
+    selectBox.appendChild(option);
+  }
 }
 
+function setPrice(selectElement) {
+  let row = selectElement.parentElement.parentElement;
+  let priceInput = row.querySelector(".price");
 
-function updateTotalByPrice(element){
-    let row = element.parentElement.parentElement;
+  let selectedName = selectElement.value;
+  let price = 0;
 
-    let price = row.querySelector(".price").value;
-    let qty = row.querySelector(".qty").value;
-    let totalBox = row.querySelector(".lineTotal");
-
-    if(price !== "" && qty !== ""){
-        totalBox.value = price * qty;
-    } else {
-        totalBox.value = "";
+  for (let i = 0; i < products.length; i++) {
+    if (products[i].name === selectedName) {
+      price = products[i].price;
+      break;
     }
+  }
 
-    updateGrandTotal();
+  priceInput.value = price.toFixed(2);
+  calculateRowTotal(priceInput);
 }
 
+function calculateRowTotal(element) {
+  let row = element.parentElement.parentElement;
 
-function addRow(){
-    let tableBody = document.getElementById("tableBody");
+  let price = parseFloat(row.querySelector(".price").value) || 0;
+  let qty = parseFloat(row.querySelector(".qty").value) || 0;
 
-    let newRow = `
-        <tr>
-            <td>
-                <select class="productSelect"></select>
-            </td>
-            <td>
-                <input type="number" class="price" oninput="updateTotalByPrice(this)">
-            </td>
-            <td>
-                <input type="number" class="qty" min="1" oninput="updateTotalByPrice(this)">
-            </td>
-            <td>
-                <input type="text" class="lineTotal" readonly>
-            </td>
-        </tr>
-    `;
+  let total = price * qty;
+  row.querySelector(".rowTotal").value = total.toFixed(2);
 
-    tableBody.insertAdjacentHTML("beforeend", newRow);
-
-    let lastSelect = tableBody.lastElementChild.querySelector(".productSelect");
-    fillProducts(lastSelect);
+  calculateGrandTotal();
 }
 
+function calculateGrandTotal() {
+  let total = 0;
+  let totals = document.querySelectorAll(".rowTotal");
 
-function updateGrandTotal(){
-    let total = 0;
+  for (let i = 0; i < totals.length; i++) {
+    total += parseFloat(totals[i].value) || 0;
+  }
 
-    document.querySelectorAll(".lineTotal").forEach(item => {
-        total += Number(item.value) || 0;
-    });
-
-    document.getElementById("grandTotal").innerText = total;
+  document.getElementById("grandTotal").innerText = total.toFixed(2);
 }
 
+function addRow() {
+  let tableBody = document.getElementById("tableBody");
 
-window.onload = () => {
-    document.querySelectorAll(".productSelect").forEach(fillProducts);
+  let row = document.createElement("tr");
+
+  row.innerHTML = `
+    <td><select class="product" onchange="setPrice(this)"></select></td>
+    <td><input type="text" class="price" readonly></td>
+    <td><input type="number" class="qty" oninput="calculateRowTotal(this)"></td>
+    <td><input type="text" class="rowTotal" readonly></td>
+    <td><button onclick="removeRow(this)">Remove</button></td>
+  `;
+
+  tableBody.appendChild(row);
+  fillProducts(row.querySelector(".product"));
+}
+
+function removeRow(button) {
+  let row = button.parentElement.parentElement;
+  row.remove();
+  calculateGrandTotal();
+}
+
+window.onload = function () {
+  let selects = document.querySelectorAll(".product");
+  for (let i = 0; i < selects.length; i++) {
+    fillProducts(selects[i]);
+  }
 };
