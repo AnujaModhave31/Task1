@@ -1,56 +1,52 @@
-body{
-    font-family: Arial, sans-serif;
-    margin: 20px;
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
 }
 
-h2{
-    margin-bottom: 15px;
-    color: #333;
-    text-align: center;
+h2 {
+  text-align: center;
 }
 
-table{
-    width: 80%;
-    border-collapse: collapse;
-    margin-bottom: 15px;
-    margin-left: 120px;
+table {
+  width: 90%;
+  margin: auto;
+  border-collapse: collapse;
 }
 
-table, th, td{
-    border: 1px solid #000;
+th, td {
+  border: 1px solid #000;
+  padding: 8px;
+  text-align: center;
 }
 
-th, td{
-    padding: 10px;
-    text-align: center;
-    font-size: 16px;
+input, select, button {
+  width: 120px;
+  height: 32px;
+  padding: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
 }
 
-select, input{
-    padding: 5px;
-    width: 120px;
-    font-size: 14px;
+button {
+  background-color: #02307a;
+  color: white;
+  
+  cursor: pointer;
 }
 
-button{
-    padding: 8px 15px;
-    background-color: #02307a;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 4px;
-    margin-left: 120px;
+button:hover {
+  background-color: #084298;
 }
 
-button:hover{
-    background-color: #084298;
+.add-btn {
+  width: 160px;
+  height: 32px;
+  margin-left: 5%;
+  margin-top: 10px;
+  white-space: nowrap;
 }
 
-h3{
-    margin-top: 10px;
-    font-size: 20px;
-    font-weight: bold;
-    color: #222;
-    margin-left: 120px;
+h3 {
+  margin-left: 5%;
+  margin-top: 15px;
 }
